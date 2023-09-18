@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Клавиатурный тренажер</title>
+		<link rel="stylesheet" href="style.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css?family=PT+Mono&display=swap&subset=cyrillic-ext"
+			rel="stylesheet"
+		/>
+	</head>
+	<body>
+		<!-- Logo and Results -->
+		<div class="container">
+			<div class="logo">
+				<i class="fas fa-keyboard"></i> Клавиатурный тренажер
+			</div>
+
+			<!-- Results -->
+			<div class="results">
+				<div class="results-title">Результаты предыдущей строки:</div>
+				<div class="indicators">
+					<div class="indicator">
+						<div class="indicator__icon">
+							<i class="fas fa-tachometer-alt"></i>
+						</div>
+						<div class="indicator__name">Символов в минуту:</div>
+						<div class="indicator__value" id="symbolsPerMinute">0</div>
+					</div>
+					<div class="indicator">
+						<div class="indicator__icon">
+							<i class="far fa-clock"></i>
+						</div>
+						<div class="indicator__name">Слов в минуту:</div>
+						<div class="indicator__value" id="WordsPerMinute">0</div>
+					</div>
+					<div class="indicator">
+						<div class="indicator__icon indicator__icon--errors">
+							<i class="fas fa-exclamation-circle"></i>
+						</div>
+						<div class="indicator__name">Ошибок:</div>
+						<div class="indicator__value" id="errorPercent">0%</div>
+					</div>
+				</div>
+			</div>
+			<!-- // Results -->
+		</div>
+		<!-- // Logo and Results -->
+
+		<div class="devider"></div>
+
+		<div class="container">
+			<!-- Input field -->
+			<form action="">
+				<input
+					id="input"
+					type="text"
+					class="input unselectable"
+					placeholder="Поле для ввода текста"
+					value="На переднем плане, прямо перед"
+				/>
+			</form>
+			<!-- // Input field -->
+
+			<!-- Text -->
+			<!-- <div class="text error"> -->
+			<div class="text" id="textExample">
+				<div>
+					<div class="line line-1">
+					<span class="done"> На переднем плане, прямо перед</span>
+					<span id="Failed" class="hint">н</span>ами, расположен был дворик, где стоял
+				</div>
+				<div class="line">
+					наполовину вычищенный автомобиль. Шофер Остин был на этот раз
+				</div>
+				<div class="line">
+					уволен окончательно и бесповоротно. Он раскинулся на земле,
+				</div>
+				</div>
+				
+			</div>
+			<!-- // Text  -->
+
+			<!-- Keyboard -->
+			<div class="keyboard">
+				<div class="line">
+					<div id="letter_ё" data-letters="Ёё">Ё</div>
+					<div id="letter_1" data-letters="1">1</div>
+					<div id="letter_2" data-letters="2">2</div>
+					<div id="letter_3" data-letters="3">3</div>
+					<div id="letter_4" data-letters="4">4</div>
+					<div id="letter_5" data-letters="5">5</div>
+					<div id="letter_6" data-letters="6">6</div>
+					<div id="letter_7" data-letters="7">7</div>
+					<div id="letter_8" data-letters="8">8</div>
+					<div id="letter_9" data-letters="9">9</div>
+					<div id="letter_0" data-letters="0">0</div>
+					<div id="letter_minus" data-letters="-">-</div>
+					<div id="letter_plus" data-letters="+">+</div>
+					<div class="backspace" id="letter_backspace" data-spec="backspace">Backspace</div>
+				</div>
+				<div class="line">
+					<div class="tab" id="letter_tab" data-spec="tab">Tab</div>
+					<div id="letter_й" data-letters="Йй">Й</div>
+					<div id="letter_ц" data-letters="Цц">Ц</div>
+					<div id="letter_у" data-letters="Уу">У</div>
+					<div id="letter_к" data-letters="Кк">К</div>
+					<div id="letter_е" data-letters="Ее">Е</div>
+					<div id="letter_н" data-letters="Нн">Н</div>
+					<div id="letter_г" data-letters="Гг">Г</div>
+					<div id="letter_ш" data-letters="Шш">Ш</div>
+					<div id="letter_щ" data-letters="Щщ">Щ</div>
+					<div id="letter_з" data-letters="Зз">З</div>
+					<div id="letter_х" data-letters="Хх">Х</div>
+					<div id="letter_ъ" data-letters="Ъъ">Ъ</div>
+					<div id="letter_slash" data-letters="\">\</div>
+				</div>
+				<div class="line">
+					<div class="caps" id="letter_capslock" data-spec="capslock">Caps Lock</div>
+					<div id="letter_ф" data-letters="Фф">Ф</div>
+					<div id="letter_ы" data-letters="Ыы">Ы</div>
+					<div id="letter_в" data-letters="Вв">В</div>
+					<div id="letter_а" data-letters="Аа">А</div>
+					<div id="letter_п" data-letters="Пп">П</div>
+					<div id="letter_р" data-letters="Рр">Р</div>
+					<div id="letter_о" data-letters="Оо">О</div>
+					<div id="letter_л" data-letters="Лл">Л</div>
+					<div id="letter_д" data-letters="Дд">Д</div>
+					<div id="letter_ж" data-letters="Жж">Ж</div>
+					<div id="letter_э" data-letters="Ээ">Э</div>
+					<div class="enter" id="letter_enter" data-spec="enter">Enter</div>
+				</div>
+				<div class="line">
+					<div class="shift" data-spec="shift">Shift</div>
+					<div id="letter_я" data-letters="Яя">Я</div>
+					<div id="letter_ч" data-letters="Чч">Ч</div>
+					<div id="letter_с" data-letters="Сс">С</div>
+					<div id="letter_м" data-letters="Мм">М</div>
+					<div id="letter_и" data-letters="Ии">И</div>
+					<div id="letter_т" data-letters="Тт">Т</div>
+					<div id="letter_ь" data-letters="Ьь">Ь</div>
+					<div id="letter_б" data-letters="Бб">Б</div>
+					<div id="letter_ю" data-letters="Юю">Ю</div>
+					<div id="letter_dot" data-letters=".,">. <sup>,</sup></div>
+					<div class="shift" data-spec="shift">Shift</div>
+				</div>
+				<div class="line">
+					<div class="space" id="letter_space" data-spec="space"></div>
+					<div class="alt" id="letter_alt" data-spec="alt">Alt</div>
+				</div>
+			</div>
+			<!-- // Keyboard -->
+		</div>
+
+		<script src="script.js"></script>
+	</body>
+</html>
