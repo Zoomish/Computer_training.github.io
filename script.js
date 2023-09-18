@@ -3,14 +3,14 @@ const letters=Array.from(document.querySelectorAll('[data-letters]'))
 const specs=Array.from(document.querySelectorAll('[data-spec]'))
 const textExample=document.querySelector('#textExample')
 const symbolsPerMinute=document.querySelector('#symbolsPerMinute')
+const WordsPerMinute=document.querySelector('#WordsPerMinute')
 const errorPercent=document.querySelector('#errorPercent')
 
-const text=`Актуальность исследования. Один из древнейших народов Центральной Азии - монголы внесли свой вклад в развитие мировой цивилизации.
-Между тем история монгольского народа на всем ее протяжении не получила достаточно достоверного и правдивого освещения в научной литературе.
-Это относится, прежде всего, к средневековой истории Монголии, особенно к периоду существования Монгольской империи и деятельности Чингис-хана.
-До недавнего времени сколько-нибудь объективное исследование истории монгольского средневекового государства не было возможным в силу политических обстоятельств.
-Более чем 300-летняя история монгольского владычества на значительной части Азии и Европы рассматривалась исключительно в негативных и идеологических аспектах.
-Однако научный подход не может основываться на оценках «хорошо» или «плохо» и требует более объективной и аргументированной оценки монгольской государственности и истории периода монгольской империи, которая, по выражению идеолога евразийства П. Савицкого, является «одной из важных глав в истории мира» [Савицкий, 1931].`
+const text=`Проходя мимо Бермудских островов, мы попали под влияние местной погоды - то светит солнце и стоит невыносимое пекло, то идет огромная туча и под ней стена ливня, сквозь которую ничего не видно, то все небо усыпано облаками разных форм, оттенков и размеров и сияет радуга.
+Интересно, в общем. Но потом все это прошло и была ясная жаркая погода почти без ветра. Вода гладкая и почти без волн, как будто в озере. Я себе Атлантический океан представлял иначе. Но через несколько дней атмосферное давление упало, поднялся ветер и нас начало валять с борта на борт. В общем весело, но не тогда, когда надо что-то делать. Например, надо точку на карту нанести, возьмешь линейку и тут эээх! Поехало все по столу и карандаш убежал. Или можно случайно ту же точку просто поставить совсем не туда, куда нужно. Но ничего, привыкли. Правда в душ было страшно ходить - там можно было легко убиться с такой качкой. И вот, мы пришли в Дувр (Великобритания). При заходе в порт открывается отличный вид: белые отвесные скалы огромной высоты, а наверху зеленые холмы. На одном из холмов располагается крепость , которая в данный момент является музеем. Эх, жаль что у нас была короткая стоянка, меньше суток. Так и не получилось сойти на берег. Но мы сейчас на линии, так что мы еще сюда вернемся, и не один раз. Паромы. Они большие и их много. Паромное сообщение с материком очень оживленное, примерно каждые 10-15 минут приходит или отходит очередной огромный паром, кое-как нашли интервал чтобы проскочить в порт и встать к причалу. Прошел день, грузовые операции по данному порту завершены и уже пора отчаливать и идти в следующий порт - Гамбург, Германия. Всего меньше суток переход и мы уже подходим к очередному порту. Гамбург находится на реке Эльба, в нескольких часах хода от моря. Пока шли до города, по обе стороны был приятный европейский пейзаж - аккуратные домики с мягким освещением, парки, беговые дорожки, все выглядит очень гармонично и уютно. На берегу пляжик с каяками, и даже прохладным вечером на пляже отдыхали люди в куртках, человек 30-50. Оставалось только смотреть и вздыхать. А чуть позже показался завод, с первого взгляда совсем неприметный, хоть и не маленький. А когда подошли чуть ближе, я увидел на стене логотип и надпись Airbus. Как сказал лоцман, это один из главных заводов Airbus в мире. И да, здание завода застеклено и со стороны реки было хорошо видно самолеты внутри. Точнее, самолеты в процессе сборки. У некоторых корпус еще желто-зеленого цвета, у других уже нанесена раскраска. 
+В Гамбурге мы стояли так же как и в Дувре - всего день, тоже не удалось погулять, печально. 
+И вот мы выгрузили часть бананов, разгрузили контейнера, погрузили новые и отправились в путь. 
+Идем в Роттердам, Нидерланды (Голландия). Также переход меньше суток.`
 
 
 const party = createParty(text)
@@ -93,6 +93,7 @@ function createParty(text) {
         startTimer:0,
         errorCounter:0,
         commonCounter:0,
+        wordCounter:0,
         started:false,
 
     }
@@ -133,7 +134,13 @@ function press(letter) {
     const mustLetter=string[party.currentPrintedIndex]
 
     if(letter===mustLetter){
+        party.erros=[]
+        if (letter===' ' && party.strings[party.currentStringIndex+1]!=='-') {
+            party.wordCounter++
+        }
+        
         party.currentPrintedIndex++
+        
 
         if(string.length<=party.currentPrintedIndex){
             party.currentPrintedIndex=0
@@ -144,7 +151,10 @@ function press(letter) {
         }
     }
     else if(!party.erros.includes(mustLetter)){
-        party.erros.push(mustLetter)
+        if(party.erros<1){
+            party.erros.push(mustLetter)
+        }
+        
         party.errorCounter++
     }
     party.commonCounter++
@@ -187,11 +197,16 @@ function viewUpdate() {
             }
 
             if(party.erros.includes(letter)){
-                const errorSpan = document.createElement('span')
-                errorSpan.classList.add('hint')
-                errorSpan.textContent=letter
+                if(party.erros<1){
+                    const errorSpan = document.createElement('span')
+                    errorSpan.classList.add('hint')
+                    errorSpan.textContent=letter
+                }
+                console.log(typeof(errorSpan))
                 return errorSpan
             }
+            
+            
             return letter
         })
     )
@@ -211,13 +226,8 @@ function viewUpdate() {
                 if(letter==='\n'){
                     return '¶'
                 }
-
-                if(party.erros.includes(letter)){
-                    const errorSpan = document.createElement('span')
-                    errorSpan.classList.add('hint')
-                    errorSpan.textContent=letter
-                    return errorSpan
-                }
+                
+                
                 return letter})
         ) 
     }
@@ -225,33 +235,20 @@ function viewUpdate() {
 
 
 
-
-
     textExample.innerHTML=''
     textExample.append(div)
-
+    
 
     input.value=string.slice(0, party.currentPrintedIndex)
 
     if(!party.statisticFlag&&party.started){
         symbolsPerMinute.textContent=Math.round(
             (60000*party.commonCounter)/party.timerCounter)
+        WordsPerMinute.textContent=Math.round(
+            (60000*party.wordCounter)/party.timerCounter)
         errorPercent.textContent=Math.floor((10000*party.errorCounter)/party.commonCounter/100)+'%'
     }
 
 }
 
 
-
-/* <div>
-					<div class="line line-1">
-					<span class="done"> На переднем плане, прямо перед</span>
-					<span class="hint">н</span>ами, расположен был дворик, где стоял
-				</div>
-				<div class="line">
-					наполовину вычищенный автомобиль. Шофер Остин был на этот раз
-				</div>
-				<div class="line">
-					уволен окончательно и бесповоротно. Он раскинулся на земле,
-				</div>
-</div> */
